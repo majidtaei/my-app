@@ -1,10 +1,10 @@
 import React from "react";
-import { useLocation , useNavigate} from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import logo from "../images/logo.png";
 
 export default function Header() {
   const Loction = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   function pathMathRote(route) {
     if (route === Loction.pathname) {
       return true;
@@ -12,7 +12,7 @@ export default function Header() {
   }
   return (
     // HEADER
-    <header className=" bg-[#fdfdfd]  shadow border-b sticky top-0 z-50  ">
+    <header className=" bg-[#fdfdfd]  shadow border-b sticky top-0 z-50 px-2  ">
       <div className="flex justify-between items-center max-w-6xl mx-auto ">
         {/* rightHeader */}
         <div>
@@ -21,7 +21,7 @@ export default function Header() {
               className={`pb-3 cursor-pointer pt-8 text-sm border-b-[3px]  font-semibold text-gray-400 border-b-transparent ${
                 pathMathRote("/") && " text-black border-b-red-500"
               }`}
-              onClick={()=> navigate("/")}
+              onClick={() => navigate("/")}
             >
               خانه
             </li>
@@ -29,7 +29,7 @@ export default function Header() {
               className={`pb-3 cursor-pointer pt-8 text-sm border-b-[3px]  font-semibold text-gray-400 border-b-transparent ${
                 pathMathRote("/offers") && " text-black border-b-red-500"
               }`}
-              onClick={()=> navigate("/offers")}
+              onClick={() => navigate("/offers")}
             >
               پیشنهاد
             </li>
@@ -37,15 +37,20 @@ export default function Header() {
               className={`pb-3 cursor-pointer pt-8 text-sm border-b-[3px]  font-semibold text-gray-400 border-b-transparent ${
                 pathMathRote("/sign-in") && " text-black border-b-red-500"
               }`}
-              onClick={()=> navigate("/sign-in")}
+              onClick={() => navigate("/sign-in")}
             >
-              ثبت نام
+              ورودیاثبت نام
             </li>
           </ul>
         </div>
         {/* leftHeader */}
         <div>
-          <img className="h-12 cursor-pointer" src={logo} alt="logo" onClick={()=> navigate("/")} />
+          <img
+            className="h-12 cursor-pointer"
+            src={logo}
+            alt="logo"
+            onClick={() => navigate("/")}
+          />
         </div>
       </div>
     </header>
