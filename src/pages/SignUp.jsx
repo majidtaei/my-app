@@ -2,27 +2,62 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import key from "../images/key.jpg";
 import OAuth from "../components/OAuth";
-
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { db } from "../firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import {toast} from "react-toastify"
 export default function SignIn() {
   const [formDate, setFormDate] = useState({
-    name :"",
+    name: "",
     email: "",
     password: "",
   });
-  const {name, email, password } = formDate;
+
+  const { name, email, password } = formDate;
+  const navigate = useNavigate()
   function onChange(e) {
     setFormDate((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
     }));
   }
+  async function onSubmit(e) {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
+      const user = userCredential.user;
+      const formDataCopy = { ...formDate };
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+      await setDoc(doc(db , "users" , user.uid) , formDataCopy)
+      toast.success("با موفقیت ثبت نام کردید")
+      navigate("/")
+
+
+    } catch (error) {
+      toast.error("خطا در ثبت نام")
+    }
+  }
   return (
     <section>
       <h1 className="text-3xl text-center font-bold mt-6">ثبت نام</h1>
       <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto flex-col-reverse lg:flex-row ">
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-          <form>
-          <input
+          <form onSubmit={onSubmit}>
+            <input
               className="w-full mb-6 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out"
               type="text"
               id="name"
@@ -74,7 +109,7 @@ export default function SignIn() {
               {" "}
               ثبت نام
             </button>
-            <OAuth/>
+            <OAuth />
           </form>
         </div>
         <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
